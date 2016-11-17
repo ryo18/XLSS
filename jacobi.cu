@@ -31,8 +31,8 @@ __global__ void jacobiOnDevice(float* x_next, float* A, float* x_now, float* b, 
 }
 
 int main() { 
-    time_t start, end, start_h, end_h, start_d, end_d;
-    float t_full, t_host, t_dev;
+    time_t start_h, end_h, start_d, end_d;
+    float t_host, t_dev;
     float *x_now, *x_next, *A, *b, *x_h, *x_d;
     float *x_now_d, *x_next_d, *A_d, *b_d;
     int N, Ni, Nj, iter, tileSize, i , k;   
