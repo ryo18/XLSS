@@ -33,8 +33,6 @@ __global__ void jacobiOnDevice(float* x_next, float* A, float* x_now, float* b, 
 int main() { 
     time_t start, end, start_h, end_h, start_d, end_d;
     float t_full, t_host, t_dev;
-    start = clock();
-
     float *x_now, *x_next, *A, *b, *x_h, *x_d;
     float *x_now_d, *x_next_d, *A_d, *b_d;
     int N, Ni, Nj, iter, tileSize, i , k;   
@@ -46,7 +44,7 @@ int main() {
     printf("======================\n\n");
     printf("Parameters:\n");
     printf("N=%d, Ni=%d, Nj=%d, ", N, Ni, Nj);
-    printf("iterations=%d, tilesize=%d\n", iter,tileSize);
+    printf("tilesize=%d\n", tileSize);
 
     x_next = (float *) malloc(Ni*sizeof(float));
     A = (float *) malloc(N*sizeof(float));
@@ -68,7 +66,7 @@ int main() {
     }
 
     start_h = clock();
-    // host
+    // HOST
     for (k=0; k<iter; k++) {
         if (k%2) {
             jacobiOnHost(x_now, A, x_next, b, Ni, Nj);
@@ -124,23 +122,17 @@ int main() {
     free(x_next); free(A); free(x_now); free(b);
     cudaFree(x_next_d); cudaFree(A_d); cudaFree(x_now_d); cudaFree(b_d);
 
-    end=clock(); 
-
-    printf("\nResult after %d iterations:\n",iter);
-
     /*
     for (i =0 ; i < Ni; i ++) {
         printf("x_h[%d]=%f\n",i,x_h[i]);
         printf("x_d[%d]=%f\n",i,x_d[i]);
     }
     */
-
-    t_full = ((float)end - (float)start) / CLOCKS_PER_SEC;
     t_host = ((float)end_h - (float)start_h) / CLOCKS_PER_SEC;
     t_dev = ((float)end_d - (float)start_d) / CLOCKS_PER_SEC;
-    printf("\nTiming:\nFull: %f\nHost: %f\nDevice: %f\n\n", t_full, t_host, t_dev);
+    printf("\nTiming:\nHost: %f\nDevice: %f\n\n", t_host, t_dev);
 
-    printf("Program terminated successfully.\n");
+    printf("successfully.\n");
 
     return 0;
 }
